@@ -13,7 +13,12 @@ Features/goals
 
 * very simple, easily auditable, code base
 
-* streaming input/output (no seeking required)
+* streaming input/output of finite length (no seeking required)
+
+**Warning**: When decrypting, blocks of plaintext data are output continously.
+However, the authentication is done only at the end of the whole message. If
+the decryption process does not finish or raises a tag error at the end, do not
+use the output as it is not verified.
 
 
 Locations
