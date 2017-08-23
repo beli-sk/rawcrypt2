@@ -27,6 +27,11 @@ from cryptography.hazmat.backends import default_backend
 backend = default_backend()
 
 
+VERSION = '2.0.0'
+PROG_NAME = "Rawcrypt"
+DESCRIPTION = 'Rawcrypt 2 - simple data encryption tool'
+
+
 def read_blocks(f, size=1024):
     while True:
         data = f.read(size)
@@ -77,11 +82,17 @@ def derive_key(password, salt=None):
     return salt, kdf.derive(password.encode())
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+            description=DESCRIPTION + '\n\nData is read from stdin and written to stdout.',
+            formatter_class=argparse.RawTextHelpFormatter,
+            )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-e', '--encrypt', action='store_true', help='encrypt')
     group.add_argument('-d', '--decrypt', action='store_true', help='decrypt')
-    parser.add_argument('-p', '--password')
+    parser.add_argument('-p', '--password', help='en/de-cryption password\n'
+            '(will be asked for if not given)')
+    parser.add_argument('-v', '--version', action='version',
+            version='{} {}'.format(PROG_NAME, VERSION))
     args = parser.parse_args()
     if args.password:
         password = args.password
